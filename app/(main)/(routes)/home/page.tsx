@@ -1,19 +1,21 @@
 "use client";
 
 import { useUser } from "@clerk/nextjs";
+import { ProjectsTable } from "./_components/projects-table";
+import { Plus } from "lucide-react";
+import { useCreate } from "@/hooks/use-create";
 
 const HomePage = () => {
   const { user } = useUser();
-  console.log(user);
+  const create = useCreate()
 
   return (
-    <div className="flex text-xl flex-col justify-center items-center px-8">
-      <p>{user?.id}</p>
-      <p>{user?.firstName}</p>
-      <p>{user?.lastName}</p>
-     <p>{user?.fullName}</p>
-      <p>{user?.imageUrl}</p>
-      <p>{user?.emailAddresses[0].emailAddress}</p>
+    <div className="p-16">
+      <h1 className="text-6xl font-bold pb-16">Proyectos</h1>
+      <div className="pb-1 pl-4">
+        <Plus onClick={create.onOpen} className="h-20 w-14 transition ease-in-out hover:animate-pulse hover:cursor-pointer" />
+      </div>
+      <ProjectsTable />
     </div>
   );
 };
