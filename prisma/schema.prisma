@@ -8,43 +8,42 @@ datasource db {
 }
 
 model Projects {
-  id            Int        @id @default(autoincrement())
-  createdAt     DateTime   @default(now())
-  updatedAt     DateTime   @updatedAt
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  name          String     @db.VarChar(255) 
-  description   String     @db.VarChar(255) 
+  name        String @db.VarChar(255)
+  description String @db.VarChar(255)
 
-  users         Users[]   
-  tasks         Tasks[]
+  users Users[]
+  tasks Tasks[]
 }
 
 model Users {
-  id            Int        @id @default(autoincrement())
-  createdAt     DateTime   @default(now())
-  updatedAt     DateTime   @updatedAt
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  clerkId       String     @db.VarChar(255) @unique
-  email         String     @db.VarChar(255) @unique
-  
-  projectId     Int        @unique
-  project       Projects    @relation(fields: [projectId], references: [id])
-  
-  tasks         Tasks[]     @relation("UserTasks")
+  clerkId String @unique @db.VarChar(255)
+  email   String @unique @db.VarChar(255)
+
+  projectId Int      @unique
+  project   Projects @relation(fields: [projectId], references: [id])
+
+  tasks Tasks[] @relation("UserTasks")
 }
 
-
 model Tasks {
-  id            Int        @id @default(autoincrement())
-  createdAt     DateTime   @default(now())
-  updatedAt     DateTime   @updatedAt
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  name          String     @db.VarChar(255)
-  description   String     @db.VarChar(255)
-  done          Boolean    @default(false)
+  name        String  @db.VarChar(255)
+  description String  @db.VarChar(255)
+  done        Boolean @default(false)
 
-  projectId     Int
-  project       Projects    @relation(fields: [projectId], references: [id])
+  projectId Int
+  project   Projects @relation(fields: [projectId], references: [id])
 
-  users         Users[]     @relation("UserTasks")
+  users Users[] @relation("UserTasks")
 }
