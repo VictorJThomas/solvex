@@ -14,6 +14,9 @@ import { useForm } from "react-hook-form";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import React, { useState } from "react";
+import axios from "axios";
+import { useSession } from "@clerk/nextjs";
+import { X } from "lucide-react";
 
 export const CreateProjectModal = () => {
   const create = useCreate();
@@ -39,6 +42,7 @@ const schema = yup.object({
 });
 
 function ProjectForm() {
+  const { session } = useSession();
   const form = useForm({
     resolver: yupResolver(schema),
   });
@@ -54,12 +58,27 @@ function ProjectForm() {
     }
   };
 
-  const onClickSubmit = () => {
+  const onClickRemove = (event: React.MouseEvent<HTMLButtonElement>, index: number) => {
+    event.preventDefault()
+    setValues((prevValues) => prevValues.filter((_, i) => i !== index));
+  };
+
+  const onClickSubmit = async (e: {preventDefault: () => void}) => {
     const formData = form.getValues();
 
     formData.users = values;
 
-    console.log(formData);
+    try{
+      const response = await axios.post("/api/project", {
+        owner: session?.user.fullName,
+        name: formData.name,
+        description: formData.description,
+        users: formData.users
+      })
+      return response.data
+    } catch (error){
+      console.error(error)
+    }
   };
 
   return (
@@ -108,7 +127,18 @@ function ProjectForm() {
         <div>
           <div className="p-4 border-b">
             {values &&
-              values.map((value, index) => <div key={index}>{value}</div>)}
+              values.map((value, index) => 
+              <div key={index} className="flex gap-x-1">
+                {value} 
+                <Button 
+                  variant="ghost" 
+                  size="sm"
+                  onClick={(event) => onClickRemove(event, index)}
+                >
+                  <X className="h-4 w-4 pb-1"/>
+                </Button>
+              </div>
+            )}
           </div>
         </div>
         <Button onClick={onClickSubmit}>Crear</Button>

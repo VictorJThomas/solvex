@@ -1,13 +1,16 @@
+import { Project } from "@/types";
 import { create } from "zustand";
 
 type EditStore = {
   isOpen: boolean;
-  onOpen: () => void;
+  project: Project | null;
+  onOpen: (project: Project) => void;
   onClose: () => void;
 };
 
 export const useEdit = create<EditStore>((set) => ({
   isOpen: false,
-  onOpen: () => set({ isOpen: true }),
+  project: null,
+  onOpen: (project: Project) => set({ isOpen: true, project }),
   onClose: () => set({ isOpen: false }),
 }));

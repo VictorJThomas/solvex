@@ -1,12 +1,10 @@
 "use client";
 
-import { useUser } from "@clerk/nextjs";
 import { ProjectsTable } from "./_components/projects-table";
 import { Plus } from "lucide-react";
 import { useCreate } from "@/hooks/use-create";
 
 const HomePage = () => {
-  const { user } = useUser();
   const create = useCreate()
 
   return (
