@@ -5,10 +5,13 @@ import { useEffect, useState } from "react";
 export const ViewProjectModal = () => {
   const view = useView();
   const [tasks, setTasks] = useState<string[]>([])
+  const [members, setMembers] = useState<string[]>([])
 
   const task = view.project?.tasks
+  const member = view.project?.members
 
   useEffect(() => {
+    if(member) setMembers(member)
     if(task) setTasks(task)
   }, [task])
 
@@ -41,6 +44,17 @@ export const ViewProjectModal = () => {
               task.map((tasks, index) => (
                 <div key={index} className="">
                   {tasks}
+                </div>
+              ))}
+            </div>
+          </div>
+          <div>
+            <p className="font-semibold">Tareas:</p>
+            <div className="grid grid-cols-2 p-3 border-b ">
+            {member &&
+              member.map((member, index) => (
+                <div key={index} className="">
+                  {members}
                 </div>
               ))}
             </div>
