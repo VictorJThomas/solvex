@@ -39,6 +39,7 @@ const schema = yup.object({
   name: yup.string().required(),
   description: yup.string(),
   users: yup.array(),
+  tasks: yup.array(),
 });
 
 function ProjectForm() {
@@ -49,6 +50,9 @@ function ProjectForm() {
 
   const [inputValue, setInputValue] = useState<string>("");
   const [values, setValues] = useState<string[]>([]);
+
+  const [inputTaskValue, setInputTaskValue] = useState<string>("");
+  const [taskValues, setTaskValues] = useState<string[]>([]);
 
   const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
@@ -63,17 +67,32 @@ function ProjectForm() {
     setValues((prevValues) => prevValues.filter((_, i) => i !== index));
   };
 
+  const handleKeyPressTasks = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      setTaskValues((prevValues) => [...prevValues, inputTaskValue.trim()]);
+      setInputTaskValue("");
+    }
+  };
+
+  const onClickTaskRemove = (event: React.MouseEvent<HTMLButtonElement>, index: number) => {
+    event.preventDefault()
+    setTaskValues((prevValues) => prevValues.filter((_, i) => i !== index));
+  };
+
   const onClickSubmit = async (e: {preventDefault: () => void}) => {
     const formData = form.getValues();
 
     formData.users = values;
+    formData.tasks = taskValues
 
     try{
       const response = await axios.post("/api/project", {
         owner: session?.user.fullName,
         name: formData.name,
         description: formData.description,
-        users: formData.users
+        users: formData.users,
+        tasks: formData.tasks
       })
       return response.data
     } catch (error){
@@ -108,6 +127,39 @@ function ProjectForm() {
             </FormItem>
           )}
         />
+        <FormField
+          name="tasks"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Tareas</FormLabel>
+              <FormControl>
+                <Input
+                  value={inputTaskValue}
+                  onKeyDown={handleKeyPressTasks}
+                  onChange={(e) => setInputTaskValue(e.target.value)}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <div>
+          <div className="p-4 border-b">
+            {taskValues &&
+              taskValues.map((value, index) => 
+              <div key={index} className="flex gap-x-1">
+                {value} 
+                <Button 
+                  variant="ghost" 
+                  size="sm"
+                  onClick={(event) => onClickTaskRemove(event, index)}
+                >
+                  <X className="h-4 w-4 pb-1"/>
+                </Button>
+              </div>
+            )}
+          </div>
+        </div>
         <FormField
           name="users"
           render={({ field }) => (

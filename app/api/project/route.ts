@@ -1,13 +1,31 @@
 import { prisma } from "@/lib/prisma";
-import { NextApiRequest } from "next";
 import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
   try {
+    const { searchParams } = new URL(request.url);
+    const page = searchParams.get("page");
+    const perPage = searchParams.get("perPage");
+
+    if (!page || !perPage) {
+      return NextResponse.json(
+        {
+          message: "Missing required query parameters",
+        },
+        {
+          status: 400,
+        }
+      );
+    }
+
+    const offset = (Number(page) - 1) * Number(perPage);
+
     const project = await prisma.projects.findMany({
       orderBy: {
         createdAt: "desc",
       },
+      skip: offset,
+      take: Number(perPage),
     });
 
     return NextResponse.json({ project }, { status: 200 });
@@ -28,13 +46,14 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
-    const { owner, name, description, users } = await request.json();
+    const { owner, name, description, users, tasks } = await request.json();
 
     const project = await prisma.projects.create({
       data: {
         owner: owner,
         name: name,
         description: description,
+        tasks: tasks,
         members: users,
       },
     });
@@ -57,7 +76,7 @@ export async function POST(request: Request) {
 
 export async function PUT(request: Request) {
   try {
-    const { name, description, users, id } = await request.json();
+    const { name, description, users, id, tasks } = await request.json();
 
     const updatedProject = await prisma.projects.update({
       where: {
@@ -69,6 +88,9 @@ export async function PUT(request: Request) {
         members: {
           set: users,
         },
+        tasks: {
+          set: tasks
+        }
       },
     });
     console.log(updatedProject);

@@ -16,21 +16,5 @@ model Projects {
   name        String   @db.VarChar(255)
   description String   @db.VarChar(255)
   members     String[]
-
-  tasks Tasks[]
-}
-
-model Tasks {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  name        String   @db.VarChar(255)
-  description String   @db.VarChar(255)
-  done        Boolean  @default(false)
-  members     String[]
-
-  projectId Int
-  project   Projects @relation(fields: [projectId], references: [id])
-
+  tasks       String[]
 }

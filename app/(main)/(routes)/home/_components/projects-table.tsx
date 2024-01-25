@@ -1,7 +1,6 @@
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -23,10 +22,18 @@ import { Project } from "@/types";
 
 export const ProjectsTable = () => {
   const [projects, setProjects] = useState<Project[]>([]);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+
+  const itemsPerPage = 10;
 
   const getTableData = async () => {
     try {
-      const response = await axios.get("/api/project");
+      const response = await axios.get("/api/project", {
+        params: {
+          page: currentPage,
+          perPage: itemsPerPage,
+        },
+      });
       setProjects(response.data.project);
     } catch (error) {
       console.error(error);
@@ -85,20 +92,58 @@ export const ProjectsTable = () => {
               })}
             </TableBody>
           </Table>
-          <div className="mt-[49vh]">
+          <div className="mt-[10vh]">
             <Pagination>
               <PaginationContent>
                 <PaginationItem>
-                  <PaginationPrevious href="#" />
+                  <PaginationPrevious
+                    className="hover:cursor-pointer"
+                    onClick={() =>{
+                      setCurrentPage((prev) => Math.max(prev - 1, 1))
+                      getTableData
+                    }}
+                  />
                 </PaginationItem>
                 <PaginationItem>
-                  <PaginationLink href="#">1</PaginationLink>
+                  <PaginationLink
+                    className="hover:cursor-pointer"
+                    onClick={() => {
+                      setCurrentPage(1)
+                      getTableData();
+                    }}
+                  >
+                    1
+                  </PaginationLink>
+                  <PaginationLink
+                    className="hover:cursor-pointer"
+                    onClick={() => {
+                      setCurrentPage(2)
+                      getTableData();
+                    }}
+                  >
+                    2
+                  </PaginationLink>
+                  <PaginationLink
+                    className="hover:cursor-pointer"
+                    onClick={() => {
+                      setCurrentPage(3)
+                      getTableData();
+                    }}
+                  >
+                    3
+                  </PaginationLink>
                 </PaginationItem>
                 <PaginationItem>
                   <PaginationEllipsis />
                 </PaginationItem>
                 <PaginationItem>
-                  <PaginationNext href="#" />
+                  <PaginationNext
+                    className="hover:cursor-pointer"
+                    onClick={() =>{ 
+                      setCurrentPage((prev) => prev + 1)
+                      getTableData()
+                    }}
+                  />
                 </PaginationItem>
               </PaginationContent>
             </Pagination>

@@ -15,10 +15,11 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { useEdit } from "@/hooks/use-edit";
+import { useView } from "@/hooks/use-view";
 import { Project } from "@/types";
 import axios from "axios";
 
-import { MoreHorizontal, Pencil, Trash } from "lucide-react";
+import { Eye, MoreHorizontal, Pencil, Trash } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 interface ProjectOptionsProps {
@@ -27,7 +28,12 @@ interface ProjectOptionsProps {
 
 export const ProjectOptions: React.FC<ProjectOptionsProps> = ({ project }) => {
   const edit = useEdit();
-  const router = useRouter()
+  const view = useView();
+  const router = useRouter();
+
+  const handleViewClick = () => {
+    view.onOpen(project);
+  };
 
   const handleEditClick = () => {
     edit.onOpen(project);
@@ -38,17 +44,15 @@ export const ProjectOptions: React.FC<ProjectOptionsProps> = ({ project }) => {
       const { id } = project;
       await axios.delete(`/api/project`, {
         data: {
-          id
-        }
+          id,
+        },
       });
       console.log("Project deleted with ID:", id);
-      
-      
     } catch (error) {
       console.error(error);
     }
-    console.log("Mi id:", project.id)
-    router.push("/home")
+    console.log("Mi id:", project.id);
+    router.push("/home");
   };
 
   return (
@@ -58,6 +62,10 @@ export const ProjectOptions: React.FC<ProjectOptionsProps> = ({ project }) => {
       </PopoverTrigger>
       <PopoverContent className="w-30">
         <div className="flex gap-x-2">
+          <Eye
+            onClick={handleViewClick}
+            className="hover:cursor-pointer hover:text-primary/40"
+          />
           <Pencil
             onClick={handleEditClick}
             className="hover:cursor-pointer hover:text-primary/40"
