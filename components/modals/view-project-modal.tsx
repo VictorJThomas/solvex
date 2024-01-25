@@ -49,12 +49,12 @@ export const ViewProjectModal = () => {
             </div>
           </div>
           <div>
-            <p className="font-semibold">Tareas:</p>
+            <p className="font-semibold">Miembros:</p>
             <div className="grid grid-cols-2 p-3 border-b ">
             {member &&
               member.map((member, index) => (
                 <div key={index} className="">
-                  {members}
+                  {member}
                 </div>
               ))}
             </div>

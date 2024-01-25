@@ -12,9 +12,6 @@ export const Sidebar = () => {
             <span className="font-bold">User</span> Management
           </p>
         </div>
-        <div className="m-4 px-4">
-          <p className="text-muted-foreground">Ultimos proyectos</p>
-        </div>
         <div className="mt-auto pb-4 mx-2">
           <UserItem />
         </div>
