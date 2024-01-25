@@ -1,36 +1,119 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## Getting Started
+# User Management 
 
-First, run the development server:
+El Sistema de Gestión de Proyectos y Usuarios es una aplicación diseñada para simplificar y optimizar la gestión de proyectos y la asignación de usuarios en un entorno empresarial. Este sistema ofrece herramientas eficientes para la creación, administración y seguimiento de proyectos, así como la gestión de usuarios asociados a dichos proyectos.
+
+
+## Características
+
+- ### Mantenimiento de proyectos:
+    - Creación y administración de proyectos.
+    - Asignación y visualización de usuarios por proyecto.
+    - Actualización y eliminación de proyectos.
+- ###  Base de datos robusta:
+    - El sistema utiliza una base de datos sólida implementada con Prisma ORM y PostgreSQL, asegurando un almacenamiento eficiente y seguro de los datos de proyectos y usuarios.
+- ###  Registro de Usuarios y Autenticación Segura:
+    - El sistema utiliza Clerk y JWT para un registro de usuarios sin complicaciones y una autenticación segura. Clerk proporciona una solución completa para la gestión de identidades, facilitando el proceso de registro y garantizando la seguridad del inicio de sesión. Además, se emplea JWT dentro de Clerk para asegurar la información del usuario.
+- ###  Paginación de datos.
+- ###  API Eficiente y segura:
+    - Implementación de una API diseñada para asegurar la seguridad, eficiencia y escalabilidad en las interacciones entre la interfaz de usuario y la base de datos.
+
+
+## Stack Utilizado
+
+**Client:** React, Redux, TailwindCSS
+
+**Server:** Node, Express
+
+
+## Intalación
+
+Instalar user-management con npm:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+  cd user-management
+  npm install 
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Generar base de datos con Prisma:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+  npx prisma generate 
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+Correr aplicación:
 
-## Learn More
+```bash
+  npm run dev 
+```
 
-To learn more about Next.js, take a look at the following resources:
+Realizar ''seed'' de datos dentro de la base de datos:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+  npx prisma db seed
+```
+## Environment Variables
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+Para ejecutar este proyecto, deberá agregar las siguientes variables de entorno y archivos .env correspondientes:.
 
-## Deploy on Vercel
+.env
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+`DATABASE_URL`
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+.env.local
+
+`NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`
+
+`CLERK_SECRET_KEY`
+
+
+## Referencia API 
+
+#### Get all projects
+
+```http
+  GET /api/projects
+```
+
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `page` | `number` | **Requerido**. Número de página para paginación. |
+|    `perPage`    |    `number`    |  **Requerido**.  Número de artículos por página.         |
+
+#### Create project
+
+```http
+  POST /api/projects/
+```
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `owner`      | `string` | **Requerido**. Nombre del propietario del nuevo proyecto.|
+| `name`      | `string` | **Requerido**. Nombre del nuevo proyecto. |
+| `description`      | `string` | **Requerido**. Descripción del nuevo proyecto. |
+| `users`      | `string[]` | **Requerido**. Array de usuarios asignados al proyecto. |
+| `tasks`      | `string[]` | **Requerido**. Array de tareas asociadas al proyecto. |
+
+#### Edit project
+
+```http
+  PUT /api/projects/
+```
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `id`      | `string` | **Requerido**. Id del proyecto a ser actualizado.|
+| `name`      | `string` | **Requerido**. Nuevo nombre para el proyecto. |
+| `description`      | `string` | **Requerido**. Nueva descripción para el proyecto. |
+| `users`      | `string[]` | **Requerido**. Array actualizado de usuarios asignados al proyecto. |
+| `tasks`      | `string[]` | **Requerido**.  Array actualizado de tareas asociadas al proyecto. |
+
+#### Delete project
+
+```http
+  GET /api/projects
+```
+
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `id` | `number` | **Requerido**. ID del proyecto a eliminar. |
