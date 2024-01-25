@@ -39,7 +39,7 @@ export const ViewProjectModal = () => {
           </div>
           <div>
             <p className="font-semibold">Tareas:</p>
-            <div className="grid grid-cols-2 p-3 border-b ">
+            <div className="grid grid-cols-2 p-3">
             {task &&
               task.map((tasks, index) => (
                 <div key={index} className="">
@@ -50,7 +50,7 @@ export const ViewProjectModal = () => {
           </div>
           <div>
             <p className="font-semibold">Miembros:</p>
-            <div className="grid grid-cols-2 p-3 border-b ">
+            <div className="grid grid-cols-2 p-3">
             {member &&
               member.map((member, index) => (
                 <div key={index} className="">

@@ -89,8 +89,8 @@ export async function PUT(request: Request) {
           set: users,
         },
         tasks: {
-          set: tasks
-        }
+          set: tasks,
+        },
       },
     });
     console.log(updatedProject);
