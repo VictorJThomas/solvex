@@ -19,7 +19,14 @@ El Sistema de Gestión de Proyectos y Usuarios es una aplicación diseñada para
     - Implementación de una API diseñada para asegurar la seguridad, eficiencia y escalabilidad en las interacciones entre la interfaz de usuario y la base de datos.
 
 
-## Intalación
+## Stack Utilizado
+
+Next.Js, React, Prisma ORM, PostgreSQL, TailwindCSS & Clerk
+
+
+
+
+## Isntalación
 
 Instalar user-management con npm:
 
